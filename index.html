@@ -253,8 +253,11 @@
   .pcard:active{transform:scale(.97);}
   .pcard .check{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#2a2010;display:none;align-items:center;justify-content:center;font-size:13px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.4);}
   .pcard.included .check{display:flex;}
-  .pcard .crop-tag{position:absolute;bottom:6px;left:6px;background:rgba(12,9,6,0.8);border:1px solid var(--gold-line);color:var(--ink);font-size:9px;letter-spacing:.5px;padding:3px 8px;border-radius:14px;display:flex;align-items:center;gap:4px;}
+  .pcard .crop-tag{background:rgba(12,9,6,0.8);border:1px solid var(--gold-line);color:var(--ink);font-size:9px;letter-spacing:.5px;padding:3px 8px;border-radius:14px;display:flex;align-items:center;gap:4px;cursor:pointer;}
   .pcard .crop-tag svg{width:10px;height:10px;stroke:var(--gold);}
+  .pcard .pcard-actions{position:absolute;bottom:6px;left:6px;right:6px;display:flex;gap:5px;flex-wrap:wrap;}
+  .pcard .pcard-x{position:absolute;top:6px;left:6px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(12,9,6,0.82);color:#fff;font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+  .pcard .pcard-x:hover{background:rgba(180,40,40,0.85);}
   .add-photo{border:1px dashed var(--gold-line);border-radius:10px;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--ink-soft);cursor:pointer;background:rgba(212,172,116,0.05);font-size:12px;}
   .add-photo:hover{background:rgba(212,172,116,0.12);}
   .add-photo .plus{font-size:24px;font-weight:300;line-height:1;}
@@ -517,7 +520,8 @@
       <div class="sec-title">Photos</div>
       <div class="photo-grid" id="photoGrid"></div>
       <input type="file" id="fileInput" accept="image/*" multiple hidden>
-      <div class="hint">Tap a photo to add or remove it from the slideshow. Tap <strong>Crop</strong> to reframe it. Up to 6 photos.</div>
+      <input type="file" id="replaceInput" accept="image/*" hidden>
+      <div class="hint">Tap a photo to add or remove it from the slideshow. Use <strong>Crop</strong>, <strong>Replace</strong>, or the <strong>×</strong> to delete. Up to 6 of your own photos.</div>
     </div>
   </div>
 </div>
@@ -595,11 +599,14 @@ function samplePhoto(g1, g2, label){
   return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
 }
 
-let photos = [
-  { src: samplePhoto('#bf8096','#37202e','Sample photo 1'), included:true },
-  { src: samplePhoto('#7fa6c9','#1f3a4d','Sample photo 2'), included:true },
-  { src: samplePhoto('#88ab93','#243528','Sample photo 3'), included:true },
-];
+function defaultPhotos(){
+  return [
+    { src: samplePhoto('#bf8096','#37202e','Sample photo 1'), included:true, sample:true },
+    { src: samplePhoto('#7fa6c9','#1f3a4d','Sample photo 2'), included:true, sample:true },
+    { src: samplePhoto('#88ab93','#243528','Sample photo 3'), included:true, sample:true },
+  ];
+}
+let photos = defaultPhotos();
 
 let mode='couple';
 let kids=[
@@ -790,6 +797,7 @@ photoSlider.oninput=()=>{ photoSec=+photoSlider.value; photoVal.textContent=fmtS
 switchSlider.oninput=()=>{ switchSec=+switchSlider.value; switchVal.textContent=fmtSec(switchSec); retime(); };
 
 const photoGrid=document.getElementById('photoGrid');
+function userPhotoCount(){ return photos.filter(p=>!p.sample).length; }
 function renderGrid(){
   photoGrid.innerHTML='';
   photos.forEach((p,i)=>{
@@ -797,18 +805,26 @@ function renderGrid(){
     c.className='pcard'+(p.included?' included':'');
     c.style.backgroundImage=`url("${p.src}")`;
     c.innerHTML=`<div class="check">&#10003;</div>
-      <div class="crop-tag" data-crop="${i}">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>Crop
+      <button class="pcard-x" data-remove="${i}" title="Remove">&times;</button>
+      <div class="pcard-actions">
+        <div class="crop-tag" data-crop="${i}">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>Crop
+        </div>
+        <div class="crop-tag" data-replace="${i}">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Replace
+        </div>
       </div>`;
     c.addEventListener('click',(e)=>{
+      if(e.target.closest('[data-remove]')){ removePhoto(i); return; }
       if(e.target.closest('[data-crop]')){ openCrop(i); return; }
+      if(e.target.closest('[data-replace]')){ replacePhoto(i); return; }
       photos[i].included=!photos[i].included;
       if(!photos.some(x=>x.included)){ photos[i].included=true; }
       renderGrid(); startSlideshow();
     });
     photoGrid.appendChild(c);
   });
-  if(photos.length < 6){
+  if(userPhotoCount() < 6){
     const add=document.createElement('div');
     add.className='add-photo';
     add.innerHTML=`<div class="plus">+</div><div>Add photo</div>`;
@@ -816,13 +832,30 @@ function renderGrid(){
     photoGrid.appendChild(add);
   }
 }
+function removePhoto(i){
+  photos.splice(i,1);
+  if(photos.length===0) photos=defaultPhotos();   // fall back to placeholders if all removed
+  renderGrid(); startSlideshow();
+}
+let replaceTarget=-1;
+function replacePhoto(i){ replaceTarget=i; document.getElementById('replaceInput').click(); }
+document.getElementById('replaceInput').addEventListener('change',function(e){
+  const f=e.target.files[0]; if(!f||replaceTarget<0) return;
+  const idx=replaceTarget;
+  const r=new FileReader();
+  r.onload=()=>{
+    photos[idx]={src:r.result, included:true};   // replaced photo is a real photo (no sample flag)
+    renderGrid(); startSlideshow(); openCrop(idx);
+  };
+  r.readAsDataURL(f); e.target.value='';
+});
 renderGrid();
 
 document.getElementById('fileInput').addEventListener('change',function(e){
   let files=[...e.target.files]; if(!files.length) return;
-  const MAX=6;
-  const slots=Math.max(0, MAX - photos.length);
-  if(slots<=0){ alert('You can have up to 6 photos. Remove one first to add another.'); e.target.value=''; return; }
+  if(photos.some(p=>p.sample)) photos=photos.filter(p=>!p.sample);   // clear placeholders on first real upload
+  const slots=Math.max(0, 6 - photos.length);
+  if(slots<=0){ alert('You can have up to 6 photos. Remove one first to add another.'); e.target.value=''; renderGrid(); startSlideshow(); return; }
   if(files.length>slots){ files=files.slice(0,slots); alert('You can have up to 6 photos, so only the first '+slots+' were added.'); }
   let pending=files.length;
   files.forEach(f=>{
