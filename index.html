@@ -517,7 +517,7 @@
       <div class="sec-title">Photos</div>
       <div class="photo-grid" id="photoGrid"></div>
       <input type="file" id="fileInput" accept="image/*" multiple hidden>
-      <div class="hint">Tap a photo to add or remove it from the slideshow. Tap <strong>Crop</strong> to reframe it.</div>
+      <div class="hint">Tap a photo to add or remove it from the slideshow. Tap <strong>Crop</strong> to reframe it. Up to 6 photos.</div>
     </div>
   </div>
 </div>
@@ -535,7 +535,7 @@
       <div class="help-item"><b>Children</b><span>In Family or Both, add each child with a name, birthday, and photo. The display shows their age and counts down to their birthday.</span></div>
       <div class="help-item"><b>Photos</b><span>Add as many photos as you want and tap one to crop it. They roll automatically in the slideshow.</span></div>
       <div class="help-item"><b>Timing</b><span>Choose how fast photos change. In Both mode you also set how long the couple stays before switching to a child.</span></div>
-      <div class="help-item"><b>Share yours</b><span>Tap "Share yours" to send your setup to someone. They'll open it and see your names, dates, and kids. Your photos stay on your device.</span></div>
+      <div class="help-item"><b>Share yours</b><span>Tap "Share yours" to send your setup to someone. They'll open it and see your display exactly as you made it — names, dates, kids, and photos.</span></div>
     </div>
   </div>
 </div>
@@ -545,7 +545,7 @@
   <div class="share-box">
     <button class="close-btn" id="shareClose">&times;</button>
     <h3>Share your display</h3>
-    <p>Anyone who opens this link sees your names, dates, children and settings. Photos stay on your device.</p>
+    <p>Anyone who opens this link sees your display exactly as you set it up — your names, dates, children, settings, and photos.</p>
     <div class="share-url" id="shareUrl"></div>
     <div class="share-btns">
       <button class="btn btn-primary" id="shareCopy">Copy link</button>
@@ -808,16 +808,22 @@ function renderGrid(){
     });
     photoGrid.appendChild(c);
   });
-  const add=document.createElement('div');
-  add.className='add-photo';
-  add.innerHTML=`<div class="plus">+</div><div>Add photo</div>`;
-  add.onclick=()=>document.getElementById('fileInput').click();
-  photoGrid.appendChild(add);
+  if(photos.length < 6){
+    const add=document.createElement('div');
+    add.className='add-photo';
+    add.innerHTML=`<div class="plus">+</div><div>Add photo</div>`;
+    add.onclick=()=>document.getElementById('fileInput').click();
+    photoGrid.appendChild(add);
+  }
 }
 renderGrid();
 
 document.getElementById('fileInput').addEventListener('change',function(e){
-  const files=[...e.target.files]; if(!files.length) return;
+  let files=[...e.target.files]; if(!files.length) return;
+  const MAX=6;
+  const slots=Math.max(0, MAX - photos.length);
+  if(slots<=0){ alert('You can have up to 6 photos. Remove one first to add another.'); e.target.value=''; return; }
+  if(files.length>slots){ files=files.slice(0,slots); alert('You can have up to 6 photos, so only the first '+slots+' were added.'); }
   let pending=files.length;
   files.forEach(f=>{
     const r=new FileReader();
