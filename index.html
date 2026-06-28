@@ -723,13 +723,15 @@ function breakdown(from){
   let d=now.getDate()-from.getDate();
   if(d<0){ m--; d+=new Date(now.getFullYear(),now.getMonth(),0).getDate(); }
   if(m<0){ y--; m+=12; }
+  if(d<0) d=0;
   return {now,totalDays,y,m,d};
 }
 function nextOccur(from){
   const now=new Date();
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
   let a=new Date(now.getFullYear(),from.getMonth(),from.getDate());
-  if(a<now) a=new Date(now.getFullYear()+1,from.getMonth(),from.getDate());
-  return Math.ceil((a-now)/86400000);
+  if(a<today) a=new Date(now.getFullYear()+1,from.getMonth(),from.getDate());
+  return Math.round((a-today)/86400000);
 }
 function possessive(name){
   if(!name) return 'their';
@@ -745,11 +747,12 @@ function fitCount(){
   while(el.scrollWidth>el.clientWidth+0.5 && s>9 && g<80){ s-=0.5; el.style.fontSize=s+'px'; g++; }
 }
 function updateCounter(){
-  let from, cLbl, aLbl, isKid=(curType==='kid');
+  let from, cLbl, aLbl, isKid=(curType==='kid'), occName='';
   if(isKid){
     if(!kids.length) return;
     if(curKid>=kids.length) curKid=0;
     const k=kids[curKid];
+    occName=k.name||'';
     from=new Date((k.birthday||'2024-01-01')+'T00:00:00');
     cLbl=(k.name||'They')+' is';
     aLbl='until '+possessive(k.name)+' birthday';
@@ -771,10 +774,19 @@ function updateCounter(){
   document.getElementById('sWeeks').textContent=Math.floor(b.totalDays/7);
   document.getElementById('sDays').textContent=b.totalDays;
   document.getElementById('hms').textContent=`${pad(now.getHours())} : ${pad(now.getMinutes())} : ${pad(now.getSeconds())}`;
-  document.getElementById('annFeat').textContent=nextOccur(from)+' days';
+  const days=nextOccur(from);
+  let annText, annSub;
+  if(days===0){
+    annText = isKid ? ('Happy birthday'+(occName?' '+occName:'')+'!') : 'Happy anniversary!';
+    annSub = '';
+  } else {
+    annText = days+(days===1?' day':' days');
+    annSub = aLbl;
+  }
+  document.getElementById('annFeat').textContent=annText;
   document.getElementById('photoDate').textContent=from.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
   document.getElementById('counterLbl').textContent=cLbl;
-  document.getElementById('annLbl').textContent=aLbl;
+  document.getElementById('annLbl').textContent=annSub;
 }
 setInterval(updateCounter,1000); updateCounter();
 
