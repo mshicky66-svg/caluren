@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caluren — A display made for two</title>
+<meta name="description" content="Caluren is an always-on display for couples — a live counter, your photos, and an anniversary countdown.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caluren">
+<meta property="og:title" content="Caluren — Your love, always on">
+<meta property="og:description" content="A keepsake display that shows your live relationship counter, your photos, and a countdown to your anniversary. Open it to see this one, then customize your own.">
+<meta property="og:url" content="https://caluren.com">
+<meta property="og:image" content="https://caluren.com/caluren.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Caluren — Your love, always on">
+<meta name="twitter:description" content="A keepsake display that shows your live relationship counter, your photos, and a countdown to your anniversary. Open it to see this one, then customize your own.">
+<meta name="twitter:image" content="https://caluren.com/caluren.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMxNjE1MTMiLz4KICA8cGF0aCBkPSJNNDIuMyAxOS43IEExNiAxNiAwIDEgMCA0Mi4zIDQ0LjMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q0YWM3NCIgc3Ryb2tlLXdpZHRoPSI3LjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root{
+    --bg:#161513;
+    --ink:#f3ece2;
+    --ink-soft:rgba(243,236,226,0.60);
+    --ink-dim:rgba(243,236,226,0.38);
+    --gold:#d4ac74;
+    --gold-bright:#e6c188;
+    --gold-soft:rgba(212,172,116,0.72);
+    --gold-line:rgba(212,172,116,0.22);
+    --disp-1:#1d1812;
+    --disp-2:#100c08;
+    --line:rgba(243,236,226,0.12);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{min-height:100%;overflow-x:hidden;overflow-x:clip;}
+  body{position:relative;width:100%;}
+  body{
+    background:
+      radial-gradient(55% 65% at 80% 48%, rgba(212,172,116,0.10), transparent 70%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'Inter',-apple-system,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  .shell{min-height:100vh;display:flex;flex-direction:column;}
+
+  /* ───────── NAV ───────── */
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 56px;flex-shrink:0;
+  }
+  .brand{
+    font-family:'Outfit',sans-serif;font-weight:500;
+    font-size:18px;letter-spacing:8px;color:var(--ink);
+  }
+  .nav-right{font-size:12px;letter-spacing:3px;color:var(--ink-dim);text-transform:uppercase;}
+
+  /* ───────── HERO ───────── */
+  .hero{
+    flex:1;display:grid;grid-template-columns:0.92fr 1.08fr;
+    gap:48px;align-items:center;
+    max-width:1280px;width:100%;margin:0 auto;padding:8px 56px 20px;
+  }
+  @media (max-width:920px){
+    .hero{grid-template-columns:1fr;gap:48px;padding:10px 28px 50px;}
+    .nav{padding:24px 28px;}
+  }
+
+  /* left copy */
+  .copy{max-width:480px;}
+  .eyebrow{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:22px;}
+  .copy h1{
+    font-family:'Outfit',sans-serif;font-weight:400;
+    font-size:clamp(40px,5.4vw,64px);line-height:1.02;letter-spacing:-1px;margin-bottom:24px;
+  }
+  .copy h1 .g{color:var(--gold);animation:alwaysOnPulse 3.2s ease-in-out infinite;}
+  @keyframes alwaysOnPulse{0%,100%{opacity:1;text-shadow:0 0 0 rgba(212,172,116,0);}50%{opacity:.85;text-shadow:0 0 22px rgba(212,172,116,0.4);}}
+  .copy .lede{font-size:clamp(15px,1.5vw,17px);line-height:1.65;color:var(--ink-soft);font-weight:300;margin-bottom:34px;max-width:420px;}
+
+  .wl-label{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--ink-dim);margin-bottom:14px;}
+  .wl-form{display:flex;gap:10px;max-width:430px;}
+  .wl-form input{
+    flex:1;padding:14px 16px;border-radius:6px;
+    background:rgba(255,255,255,0.03);border:1px solid var(--line);
+    color:var(--ink);font-family:inherit;font-size:14px;
+  }
+  .wl-form input::placeholder{color:var(--ink-dim);}
+  .wl-form input:focus{outline:none;border-color:var(--gold-soft);}
+  .wl-form button{
+    padding:14px 22px;border-radius:6px;border:none;cursor:pointer;
+    background:#f3ece2;color:#1a1714;font-family:inherit;
+    font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+    transition:background .2s;white-space:nowrap;
+  }
+  .wl-form button:hover{background:#fff;}
+  .wl-note{font-size:13px;color:var(--ink-dim);margin-top:14px;}
+  .wl-done{font-size:14px;color:var(--gold);margin-top:4px;display:none;letter-spacing:.3px;}
+  .hp{display:none;}
+  .proof{font-family:'Outfit',sans-serif;font-style:italic;font-size:16px;color:var(--gold-soft);margin-bottom:26px;letter-spacing:.2px;}
+
+  /* ───────── RIGHT: FRAME ───────── */
+  .stage-col{display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .frame{
+    position:relative;width:100%;max-width:min(382px, 50vh);
+    padding:18px;border-radius:22px;
+    /* warm wood bezel: layered gradients fake the grain + rounded edge lighting */
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 14%, rgba(0,0,0,0) 86%, rgba(0,0,0,0.35) 100%),
+      repeating-linear-gradient(92deg, rgba(60,38,20,0.0) 0px, rgba(60,38,20,0.18) 2px, rgba(120,82,46,0.0) 5px, rgba(40,24,12,0.14) 8px),
+      linear-gradient(145deg, #8a5e34 0%, #6f4828 38%, #57371e 70%, #432a17 100%);
+    box-shadow:
+      0 0 0 1px rgba(40,24,12,0.9),
+      0 2px 3px rgba(255,220,170,0.18) inset,
+      0 -2px 4px rgba(0,0,0,0.4) inset,
+      0 0 90px rgba(212,172,116,0.10),
+      0 30px 50px rgba(0,0,0,0.55);
+  }
+  /* soft shadow puddle so it reads as resting on a surface */
+  .frame::before{
+    content:'';position:absolute;left:8%;right:8%;bottom:-26px;height:34px;
+    background:radial-gradient(60% 100% at 50% 0%, rgba(0,0,0,0.55), rgba(0,0,0,0) 75%);
+    filter:blur(6px);z-index:-1;pointer-events:none;
+  }
+  /* inner rim where the wood meets the screen */
+  .frame::after{
+    content:'';position:absolute;inset:18px;border-radius:13px;
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,0.85),
+      inset 0 2px 6px rgba(0,0,0,0.6);
+    pointer-events:none;z-index:6;
+  }
+  .frame .led{
+    position:absolute;bottom:7px;left:50%;transform:translateX(-50%);
+    width:5px;height:5px;border-radius:50%;background:var(--gold);
+    opacity:.5;box-shadow:0 0 7px var(--gold);
+  }
+
+  /* ───────── DISPLAY ───────── */
+  .display{
+    position:relative;width:100%;
+    background:radial-gradient(135% 120% at 50% 0%, var(--disp-1) 0%, #150f0a 58%, var(--disp-2) 100%);
+    border-radius:12px;overflow:hidden;display:flex;flex-direction:column;
+  }
+  .d-header{display:flex;align-items:center;gap:14px;padding:14px 22px 10px;flex-shrink:0;}
+  .hdr-spacer{width:36px;flex-shrink:0;}
+  .names{flex:1;min-width:0;text-align:center;white-space:nowrap;overflow:hidden;font-family:'Outfit',sans-serif;font-weight:500;font-size:clamp(17px,2.3vw,25px);letter-spacing:.3px;color:var(--ink);}
+  .names .amp{color:var(--gold);font-weight:400;margin:0 7px;}
+  .d-date{margin-left:auto;font-size:clamp(9px,1vw,12px);font-weight:400;letter-spacing:.6px;color:var(--ink-soft);text-align:right;margin-right:8px;white-space:nowrap;}
+  .gear{flex-shrink:0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(212,172,116,0.12);border:1px solid var(--gold-line);cursor:pointer;transition:background .2s, transform .3s;animation:gearGlow 2.6s ease-in-out infinite;}
+  .gear:hover{background:rgba(212,172,116,0.24);transform:rotate(40deg);}
+  .gear svg{width:18px;height:18px;stroke:var(--gold);}
+  .help-btn{flex-shrink:0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(212,172,116,0.12);border:1px solid var(--gold-line);cursor:pointer;transition:background .2s,transform .2s;}
+  .help-btn:hover{background:rgba(212,172,116,0.24);transform:scale(1.06);}
+  .help-btn svg{width:18px;height:18px;stroke:var(--gold);}
+
+  .stage{position:relative;aspect-ratio:3/4;margin:0 22px;border-radius:11px;overflow:hidden;background:#0d0a07;}
+  .stage .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1s ease;}
+  .stage .slide.active{opacity:1;}
+  .stage::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(243,236,226,0.07), inset 0 18px 26px rgba(16,12,8,0.22), inset 0 -30px 40px rgba(16,12,8,0.30);pointer-events:none;}
+  .photo-caption{position:absolute;left:0;right:0;bottom:0;padding:20px 18px 14px;font-family:'Outfit',sans-serif;font-style:italic;font-size:clamp(12px,1.5vw,15px);font-weight:400;letter-spacing:.2px;color:var(--ink);text-shadow:0 1px 10px rgba(0,0,0,0.7);z-index:2;}
+
+  .counter{text-align:center;padding:8px 22px 0;flex-shrink:0;}
+  .counter .lbl{font-size:clamp(8px,1vw,10px);letter-spacing:3px;text-transform:uppercase;color:var(--gold-soft);font-weight:500;}
+  .counter .big{font-family:'Outfit',sans-serif;font-weight:300;font-size:clamp(17px,2.5vw,27px);line-height:1.1;margin-top:3px;letter-spacing:.2px;white-space:nowrap;overflow:hidden;max-width:100%;color:var(--ink);background:linear-gradient(180deg,#f6efe6 0%,#ecd6b0 60%,#dcbd92 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .counter .hms{font-size:clamp(9px,1vw,12px);color:var(--ink-soft);font-weight:300;letter-spacing:1.5px;margin-top:2px;font-variant-numeric:tabular-nums;}
+
+  .stats{display:flex;justify-content:center;padding:5px 22px 0;flex-shrink:0;}
+  .stat{flex:1;text-align:center;padding:3px 6px;border-right:1px solid var(--line);}
+  .stat:last-child{border-right:none;}
+  .stat .v{font-family:'Outfit',sans-serif;font-weight:600;font-size:clamp(13px,1.7vw,18px);color:var(--gold);line-height:1;}
+  .stat .k{font-size:clamp(7px,.9vw,9px);letter-spacing:1.6px;text-transform:uppercase;color:var(--ink-soft);margin-top:4px;font-weight:500;}
+
+  .photo-date{position:absolute;left:0;right:0;bottom:0;z-index:3;text-align:center;
+    font-family:'Outfit',sans-serif;font-size:clamp(11px,1.4vw,14px);font-weight:500;letter-spacing:.6px;
+    color:rgba(255,255,255,0.80);
+    padding:15px 14px 4px;
+    background:linear-gradient(to top, rgba(8,5,3,0.30) 0%, rgba(8,5,3,0.10) 55%, rgba(8,5,3,0) 100%);
+    text-shadow:0 1px 5px rgba(0,0,0,0.32);}
+
+  .features{display:flex;justify-content:center;align-items:center;border-top:1px solid var(--line);margin-top:8px;flex-shrink:0;padding:11px 8px;}
+  .ann-single{display:flex;align-items:baseline;justify-content:center;gap:6px;}
+  .ann-days{font-family:'Outfit',sans-serif;font-weight:500;font-size:clamp(10px,1.2vw,12px);color:var(--ink);letter-spacing:1.4px;text-transform:uppercase;}
+  .ann-lbl{font-size:clamp(10px,1.2vw,12px);letter-spacing:1.4px;text-transform:uppercase;color:var(--ink-soft);font-weight:500;}
+
+  /* anniversary overlay */
+  .anniv-overlay{
+    position:absolute;inset:0;z-index:8;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    background:radial-gradient(120% 100% at 50% 40%, rgba(40,28,14,0.92), rgba(12,9,6,0.97));
+    opacity:0;pointer-events:none;transition:opacity .4s;
+    text-align:center;padding:20px;
+  }
+  .anniv-overlay.show{opacity:1;}
+  .ao-hearts{color:var(--gold);font-size:clamp(16px,2.4vw,22px);letter-spacing:8px;animation:floaty 2.4s ease-in-out infinite;}
+  .ao-title{font-family:'Outfit',sans-serif;font-weight:300;font-size:clamp(24px,4vw,40px);color:var(--ink);letter-spacing:.5px;}
+  .ao-sub{font-size:clamp(10px,1.3vw,13px);letter-spacing:2px;text-transform:uppercase;color:var(--gold-soft);}
+  .ao-song{font-size:clamp(11px,1.4vw,14px);color:var(--ink-soft);margin-top:6px;font-style:italic;}
+  @keyframes floaty{0%,100%{transform:translateY(0);opacity:.8;}50%{transform:translateY(-6px);opacity:1;}}
+
+  /* song settings controls */
+  .song-actions{display:flex;gap:10px;margin-bottom:4px;}
+  .song-btn{flex:1;padding:11px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;background:rgba(212,172,116,0.10);color:var(--ink);border:1px solid var(--gold-line);transition:background .2s;}
+  .song-btn:hover{background:rgba(212,172,116,0.20);}
+  .anniv-btn{margin-top:14px;width:100%;}
+
+  /* caption below frame (mockup disclaimer OUT of frame) */
+  .frame-caption{text-align:center;}
+  .frame-caption .live{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;font-weight:600;
+    color:var(--gold-bright);
+    background:rgba(212,172,116,0.13);border:1px solid rgba(212,172,116,0.42);
+    padding:9px 16px;border-radius:30px;cursor:pointer;
+    transition:background .2s,border-color .2s,transform .12s;
+  }
+  .frame-caption .live:hover{background:rgba(212,172,116,0.24);border-color:var(--gold);}
+  .frame-caption .live:active{transform:scale(.97);}
+  .frame-caption .live svg{width:14px;height:14px;stroke:var(--gold-bright);}
+  @keyframes gearGlow{0%,100%{box-shadow:0 0 0 0 rgba(212,172,116,0);}50%{box-shadow:0 0 0 5px rgba(212,172,116,0.15);}}
+  .frame-caption .disc{font-size:12px;color:var(--ink-dim);margin-top:7px;letter-spacing:.4px;}
+  .how{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;}
+  .how-step{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft);letter-spacing:.3px;}
+  .how-num{width:19px;height:19px;border-radius:50%;border:1px solid var(--gold-line);color:var(--gold);font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0;}
+
+  /* ───────── SETTINGS PANEL ───────── */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(2px);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40;}
+  .scrim.open{opacity:1;pointer-events:auto;}
+  .panel{position:fixed;top:0;right:0;height:100%;width:min(92vw,380px);background:#1a1611;border-left:1px solid var(--gold-line);transform:translateX(100%);transition:transform .3s cubic-bezier(.3,.7,.3,1);z-index:50;display:flex;flex-direction:column;box-shadow:-30px 0 60px rgba(0,0,0,0.5);}
+  .panel.open{transform:translateX(0);}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;padding:22px 22px 16px;border-bottom:1px solid var(--gold-line);flex-shrink:0;}
+  .panel-head h2{font-family:'Outfit',sans-serif;font-weight:500;font-size:20px;color:var(--ink);letter-spacing:.5px;}
+  .close-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--gold-line);background:none;color:var(--ink);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+  .close-btn:hover{background:rgba(212,172,116,0.16);}
+  .panel-body{overflow-y:auto;padding:22px;flex:1;}
+  .sec{margin-bottom:30px;}
+  .sec-title{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-soft);font-weight:600;margin-bottom:14px;}
+  .slider-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;}
+  .slider-row .label{font-size:13px;color:var(--ink);font-weight:400;}
+  .slider-row .val{font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;color:var(--gold);}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:linear-gradient(90deg,#7a5e34,var(--gold));outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.4);border:2px solid var(--gold);}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;cursor:pointer;border:2px solid var(--gold);}
+  .hint{font-size:11px;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
+  .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .pcard{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background-size:cover;background-position:center;cursor:pointer;border:3px solid transparent;transition:border .15s, transform .15s;}
+  .pcard.included{border-color:var(--gold);}
+  .pcard:active{transform:scale(.97);}
+  .pcard .check{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#2a2010;display:none;align-items:center;justify-content:center;font-size:13px;font-weight:700;box-shadow:0 1px 4px rgba(0,0,0,0.4);}
+  .pcard.included .check{display:flex;}
+  .pcard .crop-tag{position:absolute;bottom:6px;left:6px;background:rgba(12,9,6,0.8);border:1px solid var(--gold-line);color:var(--ink);font-size:9px;letter-spacing:.5px;padding:3px 8px;border-radius:14px;display:flex;align-items:center;gap:4px;}
+  .pcard .crop-tag svg{width:10px;height:10px;stroke:var(--gold);}
+  .add-photo{border:1px dashed var(--gold-line);border-radius:10px;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--ink-soft);cursor:pointer;background:rgba(212,172,116,0.05);font-size:12px;}
+  .add-photo:hover{background:rgba(212,172,116,0.12);}
+  .add-photo .plus{font-size:24px;font-weight:300;line-height:1;}
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.3px;}
+  .field input{width:100%;padding:10px 12px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid var(--gold-line);color:var(--ink);font-family:inherit;font-size:14px;box-sizing:border-box;}
+  .field input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;display:block;}
+  .name-row{display:flex;align-items:center;gap:9px;width:100%;}
+  .name-row input{flex:1 1 0;min-width:0;width:auto;}
+  .name-amp{flex-shrink:0;color:var(--gold);font-family:'Outfit',sans-serif;font-size:16px;font-weight:400;}
+  .mode-toggle{display:flex;gap:6px;background:rgba(255,255,255,0.04);border:1px solid var(--gold-line);border-radius:10px;padding:4px;margin-bottom:22px;}
+  .mode-opt{flex:1;padding:9px 0;border:none;background:transparent;color:var(--ink-soft);font-family:inherit;font-size:13px;font-weight:500;letter-spacing:.3px;border-radius:7px;cursor:pointer;transition:background .2s,color .2s;}
+  .mode-opt.active{background:rgba(212,172,116,0.18);color:var(--gold-bright);}
+  .hidden{display:none !important;}
+  .kid-card{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .kid-card:last-of-type{border-bottom:none;}
+  .kid-photo{position:relative;width:54px;height:54px;flex-shrink:0;border-radius:9px;background-size:cover;background-position:center;cursor:pointer;border:1px solid var(--gold-line);overflow:hidden;}
+  .kid-photo span{position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:8px;letter-spacing:.6px;text-transform:uppercase;color:#fff;background:rgba(0,0,0,0.5);padding:2px 0;}
+  .kid-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px;}
+  .kid-fields input{width:100%;padding:8px 10px;border-radius:7px;background:rgba(255,255,255,0.03);border:1px solid var(--gold-line);color:var(--ink);font-family:inherit;font-size:13px;box-sizing:border-box;-webkit-appearance:none;appearance:none;}
+  .kid-remove{flex-shrink:0;width:28px;height:28px;border-radius:7px;border:1px solid var(--gold-line);background:transparent;color:var(--ink-soft);font-size:18px;line-height:1;cursor:pointer;}
+  .kid-remove:hover{color:var(--ink);}
+  .add-kid{margin-top:12px;width:100%;padding:11px;border-radius:9px;border:1px dashed var(--gold-line);background:transparent;color:var(--gold-bright);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;}
+  .add-kid span{font-size:15px;}
+  .add-kid:hover{background:rgba(212,172,116,0.08);}
+  .field input:focus{outline:none;border-color:var(--gold);}
+
+  /* ───────── CROP MODAL ───────── */
+  .crop-modal{position:fixed;inset:0;background:rgba(0,0,0,0.82);display:none;align-items:center;justify-content:center;z-index:60;padding:20px;}
+  .crop-modal.open{display:flex;}
+  .crop-box{background:#1a1611;border:1px solid var(--gold-line);border-radius:16px;padding:22px;width:min(92vw,400px);}
+  .crop-box h3{font-family:'Outfit',sans-serif;font-weight:500;font-size:18px;color:var(--ink);margin-bottom:16px;letter-spacing:.5px;}
+  .crop-stage{position:relative;width:100%;aspect-ratio:3/4;max-width:260px;margin:0 auto;border-radius:10px;overflow:hidden;background:#000;cursor:grab;touch-action:none;border:1px solid var(--gold-line);}
+  .crop-stage.dragging{cursor:grabbing;}
+  .crop-stage img{position:absolute;top:0;left:0;transform-origin:0 0;user-select:none;pointer-events:none;-webkit-user-drag:none;display:block;}
+  .crop-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.18) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.18) 1px,transparent 1px);background-size:33.33% 33.33%;}
+  .zoom-row{display:flex;align-items:center;gap:10px;margin:16px 0 6px;}
+  .zoom-row svg{width:16px;height:16px;stroke:var(--ink-soft);flex-shrink:0;}
+  .crop-actions{display:flex;gap:10px;margin-top:18px;}
+  .btn{flex:1;padding:12px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;letter-spacing:.3px;}
+  .btn-primary{background:linear-gradient(135deg,var(--gold-bright),var(--gold));color:#2a2010;}
+  .btn-ghost{background:rgba(212,172,116,0.10);color:var(--ink);border:1px solid var(--gold-line);}
+  .crop-hint{font-size:11px;color:var(--ink-soft);margin-top:10px;text-align:center;}
+
+  /* ───────── SHARE ───────── */
+  .caption-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .share-modal{position:fixed;inset:0;background:rgba(0,0,0,0.62);display:none;align-items:center;justify-content:center;z-index:80;padding:20px;}
+  .share-modal.open{display:flex;}
+  .share-box{position:relative;background:#1b1813;border:1px solid var(--gold-line);border-radius:16px;padding:26px 22px;max-width:380px;width:100%;text-align:center;}
+  .share-box h3{font-family:'Outfit',sans-serif;font-weight:600;font-size:18px;margin:0 0 6px;color:var(--ink);}
+  .share-box p{font-size:13px;color:var(--ink-soft);margin:0 0 16px;line-height:1.5;}
+  .share-url{font-size:12px;color:var(--gold-bright);background:rgba(255,255,255,0.04);border:1px solid var(--gold-line);border-radius:8px;padding:10px;word-break:break-all;margin-bottom:16px;max-height:84px;overflow:auto;text-align:left;}
+  .share-btns{display:flex;gap:10px;}
+  .share-btns .btn{flex:1;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}
+  .share-note{font-size:12px;color:var(--gold-bright);margin-top:12px;min-height:15px;}
+  .help-modal{position:fixed;inset:0;background:rgba(0,0,0,0.62);display:none;align-items:center;justify-content:center;z-index:80;padding:20px;}
+  .help-modal.open{display:flex;}
+  .help-box{position:relative;background:#1b1813;border:1px solid var(--gold-line);border-radius:16px;padding:26px 22px;max-width:420px;width:100%;max-height:82vh;overflow-y:auto;}
+  .help-box h3{font-family:'Outfit',sans-serif;font-weight:600;font-size:19px;margin:0 0 16px;color:var(--ink);text-align:center;}
+  .help-content{display:flex;flex-direction:column;gap:15px;}
+  .help-item{display:flex;flex-direction:column;gap:3px;}
+  .help-item b{font-size:13.5px;color:var(--gold-bright);font-weight:600;letter-spacing:.2px;}
+  .help-item span{font-size:13px;color:var(--ink-soft);line-height:1.5;}
+
+  /* ───────── FOOTER / CONTACT ───────── */
+  .footer{flex-shrink:0;border-top:1px solid var(--line);padding:14px 56px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .footer .f-brand{font-family:'Outfit',sans-serif;letter-spacing:6px;font-size:13px;color:var(--ink-soft);}
+  .footer .f-links{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--ink-dim);flex-wrap:wrap;}
+  .footer .f-links a{color:var(--gold-soft);text-decoration:none;}
+  .footer .f-links a:hover{color:var(--gold);}
+  .footer .f-copy{font-size:12px;color:var(--ink-dim);}
+  @media (max-width:920px){.footer{padding:20px 28px;}}
+
+  /* phones only — keeps desktop untouched */
+  @media (max-width:600px){
+    .hero{gap:18px;padding:6px 22px 40px;}
+
+    /* nothing may exceed the screen width */
+    .copy > *{min-width:0;}
+    .stage-col,.frame,.display{min-width:0;max-width:100%;}
+    .panel{width:min(90vw,340px);}
+
+    /* flatten .copy so the frame can sit right under the headline */
+    .copy{display:contents;}
+    .copy h1{order:1;font-size:40px;margin-bottom:0;}
+    .stage-col{order:2;}
+    .copy .lede{order:3;font-size:15px;margin:0;}
+    .copy .proof{order:4;margin-bottom:0;display:none;}
+    .copy .wl-label{order:5;margin-bottom:0;}
+    .copy .wl-form{order:6;}
+    .copy .wl-note{order:7;margin-top:0;}
+    .copy .wl-done{order:7;margin-top:0;}
+    .copy h1,.copy .lede,.copy .proof,.copy .wl-label,.copy .wl-note,.copy .wl-done{text-align:center;}
+
+    /* stack the form so the button can't run off the screen */
+    .wl-form{flex-direction:column;max-width:100%;gap:12px;}
+    .wl-form input{width:100%;}
+    .wl-form button{width:100%;white-space:normal;padding:15px 18px;}
+
+    /* portrait photo area handles sizing; just tighten margins on phones */
+    .stage{margin:0 16px;}
+    .d-header{padding:14px 16px 10px;}
+    .counter,.stats{padding-left:16px;padding-right:16px;}
+    .frame{max-width:100%;}
+    .footer{flex-direction:column;align-items:flex-start;gap:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="brand">CALUREN</div>
+    <div class="nav-right">Coming 2026</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+
+    <!-- LEFT COPY -->
+    <div class="copy">
+      <h1>Your love,<br><span class="g">always on.</span></h1>
+      <p class="lede">Your best memories are buried in your phone. Caluren brings them into the room — your photos in rotation, your milestones counting up, glowing softly where you actually live.</p>
+      <div class="proof">Your love deserves more than a camera roll.</div>
+      <div class="wl-label">Be first in line</div>
+      <form class="wl-form" id="wlForm" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="waitlist">
+        <p class="hp"><label>Don't fill this out: <input name="bot-field"></label></p>
+        <input type="email" id="wlEmail" name="email" placeholder="you@email.com" autocomplete="off" required>
+        <button type="submit" id="wlBtn">Join the waitlist</button>
+      </form>
+      <div class="wl-note" id="wlNote">Launching at $129–149. The waitlist gets first access and launch pricing — no spam, just the launch.</div>
+      <div class="wl-done" id="wlDone">You're on the list ✦ we'll email you at launch.</div>
+    </div>
+
+    <!-- RIGHT: FRAME + DISPLAY -->
+    <div class="stage-col">
+      <div class="frame">
+        <div class="display">
+          <div class="d-header">
+            <div class="help-btn" id="helpBtn" title="How it works">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div class="names">Alex <span class="amp">&amp;</span> Sam</div>
+            <div class="gear" id="gearBtn" title="Settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="stage" id="stage">
+            <div class="photo-date" id="photoDate">May 20, 2023</div>
+          </div>
+
+          <div class="counter">
+            <div class="lbl" id="counterLbl">You have been together for</div>
+            <div class="big" id="bigCount">—</div>
+            <div class="hms" id="hms">—</div>
+          </div>
+
+          <div class="stats">
+            <div class="stat"><div class="v" id="sMonths">—</div><div class="k">Months</div></div>
+            <div class="stat"><div class="v" id="sWeeks">—</div><div class="k">Weeks</div></div>
+            <div class="stat"><div class="v" id="sDays">—</div><div class="k">Days</div></div>
+          </div>
+
+          <div class="features">
+            <div class="ann-single">
+              <span class="ann-days" id="annFeat">— days</span>
+              <span class="ann-lbl" id="annLbl">until your anniversary</span>
+            </div>
+          </div>
+        </div>
+        <div class="led"></div>
+      </div>
+
+      <!-- disclaimer OUTSIDE the frame -->
+      <div class="frame-caption">
+        <div class="caption-actions">
+          <div class="live" id="livePreview">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Tap to make it yours
+          </div>
+          <div class="live" id="sharePill">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+            Share yours
+          </div>
+        </div>
+        <div class="disc">Prototype mockup · not the final software or frame</div>
+      </div>
+
+      <div class="how">
+        <div class="how-step"><span class="how-num">1</span> Plug it in</div>
+        <div class="how-step"><span class="how-num">2</span> Connect WiFi</div>
+        <div class="how-step"><span class="how-num">3</span> Add your photos</div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="f-links">
+      <a href="mailto:getcaluren@gmail.com">getcaluren@gmail.com</a>
+    </div>
+    <div class="f-copy">© 2026 Caluren LLC — Your love, always on</div>
+  </footer>
+</div>
+
+<!-- SETTINGS PANEL -->
+<div class="scrim" id="scrim"></div>
+<div class="panel" id="panel">
+  <div class="panel-head">
+    <h2>Settings</h2>
+    <button class="close-btn" id="closeBtn">&times;</button>
+  </div>
+  <div class="panel-body">
+    <div class="mode-toggle" id="modeToggle">
+      <button class="mode-opt active" data-mode="couple">Couple</button>
+      <button class="mode-opt" data-mode="family">Family</button>
+      <button class="mode-opt" data-mode="both">Both</button>
+    </div>
+    <div class="sec" id="coupleSec">
+      <div class="sec-title">Couple</div>
+      <div class="field"><label>Names</label>
+        <div class="name-row">
+          <input type="text" id="nameInput1" value="Alex" placeholder="Name">
+          <span class="name-amp">&amp;</span>
+          <input type="text" id="nameInput2" value="Sam" placeholder="Name">
+        </div>
+      </div>
+      <div class="field"><label>Together since</label><input type="date" id="dateInput" value="2023-05-20"></div>
+    </div>
+    <div class="sec hidden" id="familySec">
+      <div class="sec-title">Children</div>
+      <div id="kidList"></div>
+      <button class="add-kid" id="addKid"><span>+</span> Add child</button>
+      <input type="file" id="kidFileInput" accept="image/*" hidden>
+      <div class="hint">The display rotates through each child, showing their photo, age, and birthday countdown. Tap a photo to change it.</div>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Timing</div>
+      <div id="photoTiming">
+        <div class="slider-row"><span class="label" id="photoLbl">Change photo every</span><span class="val" id="photoVal">5s</span></div>
+        <input type="range" id="photoSlider" min="5" max="60" step="1" value="5">
+      </div>
+      <div id="switchTiming" class="hidden">
+        <div class="slider-row"><span class="label" id="switchLbl">Change child every</span><span class="val" id="switchVal">8s</span></div>
+        <input type="range" id="switchSlider" min="5" max="60" step="1" value="8">
+      </div>
+      <div class="hint" id="timingHint">Set how long each photo stays on screen, from 5 seconds to 1 minute.</div>
+    </div>
+    <div class="sec" id="photosSec">
+      <div class="sec-title">Photos</div>
+      <div class="photo-grid" id="photoGrid"></div>
+      <input type="file" id="fileInput" accept="image/*" multiple hidden>
+      <div class="hint">Tap a photo to add or remove it from the slideshow. Tap <strong>Crop</strong> to reframe it.</div>
+    </div>
+  </div>
+</div>
+
+<!-- HELP MODAL -->
+<div class="help-modal" id="helpModal">
+  <div class="help-box">
+    <button class="close-btn" id="helpClose">&times;</button>
+    <h3>How Caluren works</h3>
+    <div class="help-content">
+      <div class="help-item"><b>Your display</b><span>Caluren stays on and shows a live counter, your photos, and a countdown to your next big day. Just plug it in, connect WiFi, and add your photos.</span></div>
+      <div class="help-item"><b>Settings — the gear, top right</b><span>Tap the gear to open settings and customize everything below.</span></div>
+      <div class="help-item"><b>Couple, Family, or Both</b><span>Couple shows your names and how long you've been together. Family rotates through your kids, showing each one's age and birthday countdown. Both shows the couple screen and the kids, switching between them.</span></div>
+      <div class="help-item"><b>Names and date</b><span>Set both names and your "together since" date. The counter and anniversary countdown update on their own.</span></div>
+      <div class="help-item"><b>Children</b><span>In Family or Both, add each child with a name, birthday, and photo. The display shows their age and counts down to their birthday.</span></div>
+      <div class="help-item"><b>Photos</b><span>Add as many photos as you want and tap one to crop it. They roll automatically in the slideshow.</span></div>
+      <div class="help-item"><b>Timing</b><span>Choose how fast photos change. In Both mode you also set how long the couple stays before switching to a child.</span></div>
+      <div class="help-item"><b>Share yours</b><span>Tap "Share yours" to send your setup to someone. They'll open it and see your names, dates, and kids. Your photos stay on your device.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE MODAL (desktop / fallback) -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <button class="close-btn" id="shareClose">&times;</button>
+    <h3>Share your display</h3>
+    <p>Anyone who opens this link sees your names, dates, children and settings. Photos stay on your device.</p>
+    <div class="share-url" id="shareUrl"></div>
+    <div class="share-btns">
+      <button class="btn btn-primary" id="shareCopy">Copy link</button>
+      <a class="btn btn-ghost" id="shareEmail" href="#">Email</a>
+    </div>
+    <div class="share-note" id="shareNote"></div>
+  </div>
+</div>
+
+<!-- CROP MODAL -->
+<div class="crop-modal" id="cropModal">
+  <div class="crop-box">
+    <h3>Crop photo</h3>
+    <div class="crop-stage" id="cropStage">
+      <img id="cropImg" src="" alt="">
+      <div class="crop-grid"></div>
+    </div>
+    <div class="zoom-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M8 11h6"/></svg>
+      <input type="range" id="zoomSlider" min="1" max="3" step="0.01" value="1">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M11 8v6M8 11h6"/></svg>
+    </div>
+    <div class="crop-hint">Drag to reposition · slide to zoom</div>
+    <div class="crop-actions">
+      <button class="btn btn-ghost" id="cropCancel">Cancel</button>
+      <button class="btn btn-primary" id="cropSave">Save crop</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function samplePhoto(g1, g2, label){
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='660' height='880'>
+    <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0' stop-color='${g1}'/><stop offset='1' stop-color='${g2}'/>
+    </linearGradient></defs>
+    <rect width='660' height='880' fill='url(#g)'/>
+    <text x='330' y='250' font-family='Georgia,serif' font-size='30' fill='rgba(255,255,255,0.78)' text-anchor='middle' letter-spacing='1'>${label}</text>
+    <path d='M330 360 C330 360 315 338 292 348 C266 360 266 393 292 420 L330 456 L368 420 C394 393 394 360 368 348 C345 338 330 360 330 360 Z' fill='rgba(255,255,255,0.85)'/>
+    <g fill='rgba(255,255,255,0.9)'>
+      <circle cx='298' cy='500' r='48'/>
+      <path d='M222 730 Q228 540 298 534 Q368 540 374 730 Z'/>
+      <circle cx='394' cy='494' r='40'/>
+      <path d='M322 730 Q328 542 394 536 Q460 542 466 730 Z'/>
+    </g>
+  </svg>`;
+  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+}
+
+let photos = [
+  { src: samplePhoto('#bf8096','#37202e','Sample photo 1'), included:true },
+  { src: samplePhoto('#7fa6c9','#1f3a4d','Sample photo 2'), included:true },
+  { src: samplePhoto('#88ab93','#243528','Sample photo 3'), included:true },
+];
+
+let mode='couple';
+let kids=[
+  { name:'Sophia', birthday:'2021-05-12', photo:samplePhoto('#c79bb0','#3a2433','Sample photo') },
+  { name:'Liam',   birthday:'2023-09-08', photo:samplePhoto('#8fb0cd','#22384a','Sample photo') },
+];
+let kidPhotoTarget=-1;
+
+let photoSec=5, switchSec=8, viewTimer=null, photoTimer=null;
+let curType='couple', curKid=0;
+let views=[], curView=0, coupleSlides=[], kidSlides=[], couplePhotoIdx=0;
+const stage=document.getElementById('stage');
+
+function setCoupleHeader(){
+  const n1=(document.getElementById('nameInput1').value||'').trim();
+  const n2=(document.getElementById('nameInput2').value||'').trim();
+  const el=document.querySelector('.names');
+  if(n1&&n2) el.innerHTML=`${n1} <span class="amp">&amp;</span> ${n2}`;
+  else el.textContent=(n1+(n1&&n2?' & ':'')+n2);
+}
+function buildShow(){
+  [...stage.querySelectorAll('.slide')].forEach(s=>s.remove());
+  coupleSlides=[]; kidSlides=[]; views=[];
+  const showCouple=(mode==='couple'||mode==='both');
+  const showFamily=(mode==='family'||mode==='both');
+  if(showCouple){
+    photos.filter(p=>p.included).forEach(p=>{
+      const d=document.createElement('div'); d.className='slide';
+      d.style.backgroundImage=`url("${p.src}")`; stage.appendChild(d); coupleSlides.push(d);
+    });
+    views.push({type:'couple'});
+  }
+  if(showFamily){
+    kids.forEach((k,i)=>{
+      const d=document.createElement('div'); d.className='slide';
+      d.style.backgroundImage=`url("${k.photo}")`; stage.appendChild(d); kidSlides.push(d);
+      views.push({type:'kid', kidIdx:i});
+    });
+  }
+}
+function clearActive(){ [...stage.querySelectorAll('.slide')].forEach(s=>s.classList.remove('active')); }
+function showCouplePhoto(){
+  if(!coupleSlides.length) return;
+  if(couplePhotoIdx>=coupleSlides.length) couplePhotoIdx=0;
+  clearActive();
+  coupleSlides[couplePhotoIdx].classList.add('active');
+}
+function startPhotoTimer(){
+  clearInterval(photoTimer);
+  if(curType!=='couple' || coupleSlides.length<=1) return;
+  photoTimer=setInterval(()=>{
+    couplePhotoIdx=(couplePhotoIdx+1)%coupleSlides.length;
+    showCouplePhoto();
+  }, photoSec*1000);
+}
+function showView(v){
+  if(!views.length) return;
+  if(v>=views.length) v=0;
+  curView=v;
+  const view=views[v];
+  if(view.type==='couple'){
+    curType='couple'; couplePhotoIdx=0;
+    showCouplePhoto(); startPhotoTimer();
+    setCoupleHeader();
+  } else {
+    curType='kid'; curKid=view.kidIdx;
+    clearInterval(photoTimer); clearActive();
+    if(kidSlides[curKid]) kidSlides[curKid].classList.add('active');
+    const el=document.querySelector('.names');
+    el.textContent=(kids[curKid]&&kids[curKid].name)||'';
+  }
+  fitNames(); updateCounter();
+}
+function scheduleView(){
+  clearTimeout(viewTimer);
+  if(views.length<=1) return;            // one screen only (e.g. couple-only): nothing to switch to
+  viewTimer=setTimeout(()=>{
+    curView=(curView+1)%views.length;
+    showView(curView);
+    scheduleView();
+  }, switchSec*1000);
+}
+function startSlideshow(){
+  clearTimeout(viewTimer); clearInterval(photoTimer);
+  buildShow();
+  curView=0;
+  if(!views.length) return;
+  showView(0);
+  scheduleView();
+}
+function retime(){
+  if(curType==='couple') startPhotoTimer();
+  clearTimeout(viewTimer); scheduleView();
+}
+function refreshCurrent(){
+  if(!views.length) return;
+  const view=views[curView];
+  if(view.type==='kid'){
+    curType='kid'; curKid=view.kidIdx;
+    const el=document.querySelector('.names');
+    el.textContent=(kids[curKid]&&kids[curKid].name)||''; fitNames();
+  }
+  updateCounter();
+}
+
+let startDate=new Date('2023-05-20T00:00:00');
+const pad=n=>String(n).padStart(2,'0');
+function breakdown(from){
+  const now=new Date();
+  let diff=now-from; if(diff<0) diff=0;
+  const totalDays=Math.floor(diff/86400000);
+  let y=now.getFullYear()-from.getFullYear();
+  let m=now.getMonth()-from.getMonth();
+  let d=now.getDate()-from.getDate();
+  if(d<0){ m--; d+=new Date(now.getFullYear(),now.getMonth(),0).getDate(); }
+  if(m<0){ y--; m+=12; }
+  return {now,totalDays,y,m,d};
+}
+function nextOccur(from){
+  const now=new Date();
+  let a=new Date(now.getFullYear(),from.getMonth(),from.getDate());
+  if(a<now) a=new Date(now.getFullYear()+1,from.getMonth(),from.getDate());
+  return Math.ceil((a-now)/86400000);
+}
+function possessive(name){
+  if(!name) return 'their';
+  return name + (/s$/i.test(name) ? "'" : "'s");
+}
+function fitCount(){
+  const el=document.getElementById('bigCount');
+  if(!el) return;
+  el.style.fontSize='';                 // back to the CSS clamp size
+  let s=parseFloat(getComputedStyle(el).fontSize);
+  el.style.fontSize=s+'px';
+  let g=0;
+  while(el.scrollWidth>el.clientWidth+0.5 && s>9 && g<80){ s-=0.5; el.style.fontSize=s+'px'; g++; }
+}
+function updateCounter(){
+  let from, cLbl, aLbl, isKid=(curType==='kid');
+  if(isKid){
+    if(!kids.length) return;
+    if(curKid>=kids.length) curKid=0;
+    const k=kids[curKid];
+    from=new Date((k.birthday||'2024-01-01')+'T00:00:00');
+    cLbl=(k.name||'They')+' is';
+    aLbl='until '+possessive(k.name)+' birthday';
+  } else {
+    from=startDate;
+    cLbl='You have been together for';
+    aLbl='until your anniversary';
+  }
+  const b=breakdown(from), now=b.now;
+  const parts=[];
+  if(b.y>0) parts.push(b.y+(b.y===1?' year':' years'));
+  if(b.m>0) parts.push(b.m+(b.m===1?' month':' months'));
+  parts.push(b.d+(b.d===1?' day':' days'));
+  let bigText=parts.join(', ');
+  if(isKid) bigText+=' old';
+  const bigEl=document.getElementById('bigCount');
+  if(bigEl.textContent!==bigText){ bigEl.textContent=bigText; fitCount(); }
+  document.getElementById('sMonths').textContent=Math.floor(b.totalDays/30.4375);
+  document.getElementById('sWeeks').textContent=Math.floor(b.totalDays/7);
+  document.getElementById('sDays').textContent=b.totalDays;
+  document.getElementById('hms').textContent=`${pad(now.getHours())} : ${pad(now.getMinutes())} : ${pad(now.getSeconds())}`;
+  document.getElementById('annFeat').textContent=nextOccur(from)+' days';
+  document.getElementById('photoDate').textContent=from.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('counterLbl').textContent=cLbl;
+  document.getElementById('annLbl').textContent=aLbl;
+}
+setInterval(updateCounter,1000); updateCounter();
+
+/* settings */
+const panel=document.getElementById('panel'), scrim=document.getElementById('scrim');
+document.getElementById('gearBtn').onclick=()=>{panel.classList.add('open');scrim.classList.add('open');};
+document.getElementById('livePreview').onclick=()=>{panel.classList.add('open');scrim.classList.add('open');};
+function closePanel(){panel.classList.remove('open');scrim.classList.remove('open');}
+document.getElementById('closeBtn').onclick=closePanel; scrim.onclick=closePanel;
+
+const helpModal=document.getElementById('helpModal');
+document.getElementById('helpBtn').onclick=()=>helpModal.classList.add('open');
+document.getElementById('helpClose').onclick=()=>helpModal.classList.remove('open');
+helpModal.addEventListener('click',e=>{ if(e.target===helpModal) helpModal.classList.remove('open'); });
+
+const photoSlider=document.getElementById('photoSlider'), photoVal=document.getElementById('photoVal');
+const switchSlider=document.getElementById('switchSlider'), switchVal=document.getElementById('switchVal');
+const fmtSec=s=>s>=60?'1 min':s+'s';
+photoSlider.oninput=()=>{ photoSec=+photoSlider.value; photoVal.textContent=fmtSec(photoSec); retime(); };
+switchSlider.oninput=()=>{ switchSec=+switchSlider.value; switchVal.textContent=fmtSec(switchSec); retime(); };
+
+const photoGrid=document.getElementById('photoGrid');
+function renderGrid(){
+  photoGrid.innerHTML='';
+  photos.forEach((p,i)=>{
+    const c=document.createElement('div');
+    c.className='pcard'+(p.included?' included':'');
+    c.style.backgroundImage=`url("${p.src}")`;
+    c.innerHTML=`<div class="check">&#10003;</div>
+      <div class="crop-tag" data-crop="${i}">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>Crop
+      </div>`;
+    c.addEventListener('click',(e)=>{
+      if(e.target.closest('[data-crop]')){ openCrop(i); return; }
+      photos[i].included=!photos[i].included;
+      if(!photos.some(x=>x.included)){ photos[i].included=true; }
+      renderGrid(); startSlideshow();
+    });
+    photoGrid.appendChild(c);
+  });
+  const add=document.createElement('div');
+  add.className='add-photo';
+  add.innerHTML=`<div class="plus">+</div><div>Add photo</div>`;
+  add.onclick=()=>document.getElementById('fileInput').click();
+  photoGrid.appendChild(add);
+}
+renderGrid();
+
+document.getElementById('fileInput').addEventListener('change',function(e){
+  const files=[...e.target.files]; if(!files.length) return;
+  let pending=files.length;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      photos.push({src:r.result,included:true});
+      pending--;
+      if(pending===0){ renderGrid(); startSlideshow(); }
+    };
+    r.readAsDataURL(f);
+  });
+  e.target.value='';
+});
+
+function fitNames(){
+  const el=document.querySelector('.names');
+  if(!el) return;
+  el.style.fontSize='';                 // back to the CSS clamp size
+  let s=parseFloat(getComputedStyle(el).fontSize);
+  el.style.fontSize=s+'px';
+  let guard=0;
+  while(el.scrollWidth>el.clientWidth+0.5 && s>10 && guard<70){ s-=0.5; el.style.fontSize=s+'px'; guard++; }
+}
+function applyNames(){
+  if(curType!=='couple') return;   // only touch the header when a couple frame is showing
+  setCoupleHeader();
+  fitNames();
+}
+document.getElementById('nameInput1').addEventListener('input',applyNames);
+document.getElementById('nameInput2').addEventListener('input',applyNames);
+window.addEventListener('resize', ()=>{ fitNames(); fitCount(); });
+fitNames();
+document.getElementById('dateInput').addEventListener('change',e=>{
+  if(e.target.value){ startDate=new Date(e.target.value+'T00:00:00'); updateCounter(); }
+});
+
+/* ── Family mode: children list, photos, add/remove, toggle ── */
+const kidFileInput=document.getElementById('kidFileInput');
+function renderKids(){
+  const list=document.getElementById('kidList');
+  list.innerHTML='';
+  kids.forEach((k,i)=>{
+    const nm=(k.name||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    const card=document.createElement('div');
+    card.className='kid-card';
+    card.innerHTML=`
+      <div class="kid-photo" data-kidphoto="${i}" style="background-image:url('${k.photo}')"><span>Edit</span></div>
+      <div class="kid-fields">
+        <input type="text" data-kidname="${i}" value="${nm}" placeholder="Name">
+        <input type="date" data-kidbday="${i}" value="${k.birthday||''}">
+      </div>
+      <button class="kid-remove" data-kidremove="${i}" title="Remove">&times;</button>`;
+    list.appendChild(card);
+  });
+  list.querySelectorAll('[data-kidname]').forEach(inp=>inp.addEventListener('input',e=>{
+    kids[+e.target.dataset.kidname].name=e.target.value;
+    refreshCurrent();
+  }));
+  list.querySelectorAll('[data-kidbday]').forEach(inp=>inp.addEventListener('change',e=>{
+    if(e.target.value){ kids[+e.target.dataset.kidbday].birthday=e.target.value; refreshCurrent(); }
+  }));
+  list.querySelectorAll('[data-kidremove]').forEach(b=>b.addEventListener('click',e=>{
+    const i=+e.currentTarget.dataset.kidremove;
+    if(kids.length>1){ kids.splice(i,1); renderKids(); startSlideshow(); }
+  }));
+  list.querySelectorAll('[data-kidphoto]').forEach(p=>p.addEventListener('click',e=>{
+    kidPhotoTarget=+e.currentTarget.dataset.kidphoto; kidFileInput.click();
+  }));
+}
+kidFileInput.addEventListener('change',function(e){
+  const f=e.target.files[0]; if(!f||kidPhotoTarget<0) return;
+  const idx=kidPhotoTarget;
+  const r=new FileReader();
+  r.onload=()=>{
+    kids[idx].photo=r.result;
+    renderKids();
+    startSlideshow();
+    openCrop(idx,'kid');
+  };
+  r.readAsDataURL(f); e.target.value='';
+});
+document.getElementById('addKid').addEventListener('click',()=>{
+  kids.push({ name:'', birthday:'2024-01-01', photo:samplePhoto('#c8a27a','#3a2a1c','Sample photo') });
+  renderKids(); startSlideshow();
+});
+function setMode(nm){
+  mode=nm;
+  document.querySelectorAll('.mode-opt').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  const showCouple=(mode==='couple'||mode==='both');
+  const showFamily=(mode==='family'||mode==='both');
+  document.getElementById('coupleSec').classList.toggle('hidden', !showCouple);
+  document.getElementById('photosSec').classList.toggle('hidden', !showCouple);
+  document.getElementById('familySec').classList.toggle('hidden', !showFamily);
+  document.getElementById('photoTiming').classList.toggle('hidden', !showCouple);
+  document.getElementById('switchTiming').classList.toggle('hidden', !showFamily);
+  // adaptive labels + hint
+  document.getElementById('photoLbl').textContent = (mode==='both') ? 'Change couple photo every' : 'Change photo every';
+  document.getElementById('switchLbl').textContent = (mode==='both') ? 'Change from couple to child every' : 'Change child every';
+  const hint=document.getElementById('timingHint');
+  if(mode==='both') hint.textContent='Your couple photos roll on the first timer. The second sets how long the couple stays before switching to a child, and how long each child stays.';
+  else if(mode==='family') hint.textContent='How long each child stays on screen, from 5 seconds to 1 minute.';
+  else hint.textContent='How long each photo stays on screen, from 5 seconds to 1 minute.';
+  if(showFamily) renderKids();
+  startSlideshow();
+}
+document.querySelectorAll('.mode-opt').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+renderKids();
+
+/* waitlist → submits to Netlify Forms (AJAX so the page doesn't reload) */
+function wireWaitlist(formId, doneId, noteId){
+  const form=document.getElementById(formId);
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const inp=form.querySelector('input[type=email]');
+    if(!inp || !inp.value.includes('@')){ if(inp) inp.focus(); return; }
+    const body=new URLSearchParams(new FormData(form)).toString();
+    const done=()=>{
+      form.style.display='none';
+      if(noteId){ const n=document.getElementById(noteId); if(n) n.style.display='none'; }
+      const d=document.getElementById(doneId); if(d) d.style.display='block';
+    };
+    fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body}).then(done).catch(done);
+  });
+}
+wireWaitlist('wlForm','wlDone','wlNote');
+
+/* ───────── SHARE: encode current setup into a link (no photos) ───────── */
+const KIDPAL=[['#c79bb0','#3a2433'],['#8fb0cd','#22384a'],['#c8a27a','#3a2a1c'],['#88ab93','#243528'],['#b58fae','#332338']];
+function encodeConfig(){
+  const cfg={
+    m:mode,
+    a:(document.getElementById('nameInput1').value||''),
+    b:(document.getElementById('nameInput2').value||''),
+    d:(document.getElementById('dateInput').value||''),
+    k:kids.map(k=>({n:k.name||'',b:k.birthday||''})),
+    p:photoSec, s:switchSec
+  };
+  return encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(cfg)))));
+}
+function buildShareUrl(){ return location.origin+location.pathname+'#caluren='+encodeConfig(); }
+function applyConfigFromURL(){
+  const m=location.hash.match(/caluren=([^&]+)/);
+  if(!m) return false;
+  try{
+    const cfg=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));
+    if(cfg.a!=null) document.getElementById('nameInput1').value=cfg.a;
+    if(cfg.b!=null) document.getElementById('nameInput2').value=cfg.b;
+    if(cfg.d){ document.getElementById('dateInput').value=cfg.d; startDate=new Date(cfg.d+'T00:00:00'); }
+    if(Array.isArray(cfg.k) && cfg.k.length){
+      kids=cfg.k.map((x,i)=>({ name:x.n||'', birthday:x.b||'2024-01-01', photo:samplePhoto(KIDPAL[i%KIDPAL.length][0],KIDPAL[i%KIDPAL.length][1],'Sample photo') }));
+    }
+    if(cfg.p){ photoSec=+cfg.p; photoSlider.value=photoSec; photoVal.textContent=fmtSec(photoSec); }
+    if(cfg.s){ switchSec=+cfg.s; switchSlider.value=switchSec; switchVal.textContent=fmtSec(switchSec); }
+    setMode(cfg.m||'couple');
+    return true;
+  }catch(e){ return false; }
+}
+
+/* full setup INCLUDING photos — used with the backend so shared links keep images */
+function buildFullConfig(){
+  return {
+    m:mode,
+    a:document.getElementById('nameInput1').value||'',
+    b:document.getElementById('nameInput2').value||'',
+    d:document.getElementById('dateInput').value||'',
+    k:kids.map(k=>({ n:k.name||'', b:k.birthday||'', ph:k.photo||'' })),
+    cp:photos.filter(p=>p.included).map(p=>p.src),
+    p:photoSec, s:switchSec
+  };
+}
+function applyFullConfig(cfg){
+  try{
+    if(cfg.a!=null) document.getElementById('nameInput1').value=cfg.a;
+    if(cfg.b!=null) document.getElementById('nameInput2').value=cfg.b;
+    if(cfg.d){ document.getElementById('dateInput').value=cfg.d; startDate=new Date(cfg.d+'T00:00:00'); }
+    if(Array.isArray(cfg.k) && cfg.k.length){
+      kids=cfg.k.map((x,i)=>({ name:x.n||'', birthday:x.b||'2024-01-01', photo:x.ph||samplePhoto(KIDPAL[i%KIDPAL.length][0],KIDPAL[i%KIDPAL.length][1],'Sample photo') }));
+    }
+    if(Array.isArray(cfg.cp) && cfg.cp.length){
+      photos=cfg.cp.map(src=>({ src, included:true }));
+    }
+    if(cfg.p){ photoSec=+cfg.p; photoSlider.value=photoSec; photoVal.textContent=fmtSec(photoSec); }
+    if(cfg.s){ switchSec=+cfg.s; switchSlider.value=switchSec; switchVal.textContent=fmtSec(switchSec); }
+    renderGrid();
+    setMode(cfg.m||'couple');
+  }catch(e){ startSlideshow(); }
+}
+/* on load: ?d=ID pulls a saved setup (with photos) from the backend */
+async function initFromUrl(){
+  const id=new URLSearchParams(location.search).get('d');
+  if(id){
+    try{
+      const res=await fetch('/.netlify/functions/get-display?id='+encodeURIComponent(id));
+      if(res.ok){ applyFullConfig(await res.json()); return; }
+    }catch(e){}
+  }
+  if(applyConfigFromURL()) return;   // old text-only links still work
+  startSlideshow();
+}
+
+const shareModal=document.getElementById('shareModal');
+function openShareModal(url){
+  document.getElementById('shareUrl').textContent=url;
+  document.getElementById('shareEmail').href='mailto:?subject='+encodeURIComponent('My Caluren display')+'&body='+encodeURIComponent('Check out the relationship display I set up on Caluren: '+url);
+  document.getElementById('shareNote').textContent='';
+  shareModal.classList.add('open');
+}
+async function shareConfig(){
+  const pill=document.getElementById('sharePill');
+  const prev=pill.innerHTML;
+  pill.style.pointerEvents='none'; pill.style.opacity='0.7'; pill.textContent='Preparing link…';
+  let url;
+  try{
+    const res=await fetch('/.netlify/functions/save-display',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(buildFullConfig())
+    });
+    if(!res.ok) throw new Error('save failed');
+    const out=await res.json();
+    if(!out.id) throw new Error('no id');
+    url=location.origin+location.pathname+'?d='+out.id;
+  }catch(e){
+    url=buildShareUrl();   // fallback: text-only link if backend is unavailable
+  }
+  pill.innerHTML=prev; pill.style.pointerEvents=''; pill.style.opacity='';
+  const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1 && innerWidth<900);
+  if(isMobile && navigator.share){
+    try{ await navigator.share({title:'Caluren', url}); return; }
+    catch(e){ if(e && e.name==='AbortError') return; }
+  }
+  openShareModal(url);
+}
+document.getElementById('sharePill').addEventListener('click', shareConfig);
+document.getElementById('shareClose').onclick=()=>shareModal.classList.remove('open');
+shareModal.addEventListener('click',e=>{ if(e.target===shareModal) shareModal.classList.remove('open'); });
+document.getElementById('shareCopy').onclick=async()=>{
+  const url=document.getElementById('shareUrl').textContent;
+  const note=document.getElementById('shareNote');
+  try{ await navigator.clipboard.writeText(url); note.textContent='Link copied'; }
+  catch(e){
+    const t=document.createElement('textarea'); t.value=url; document.body.appendChild(t); t.select();
+    try{ document.execCommand('copy'); note.textContent='Link copied'; }catch(_){ note.textContent='Press and hold to copy the link above'; }
+    document.body.removeChild(t);
+  }
+};
+
+/* ───────── CROP (bug fixed: open modal first, then measure) ───────── */
+const cropModal=document.getElementById('cropModal'), cropStage=document.getElementById('cropStage');
+const cropImg=document.getElementById('cropImg'), zoomSlider=document.getElementById('zoomSlider');
+let cropTargetIdx=-1, cropKind='photo', baseW=0, baseH=0, tx=0, ty=0, scale=1;
+
+function openCrop(idx, kind='photo'){
+  cropTargetIdx=idx; cropKind=kind;
+  cropModal.classList.add('open');           // open FIRST so the stage has real dimensions
+  const img=new Image();
+  img.onload=()=>{
+    requestAnimationFrame(()=>{               // wait one frame for layout
+      const W=cropStage.clientWidth, H=cropStage.clientHeight;
+      const nw=img.naturalWidth||800, nh=img.naturalHeight||600;
+      const ratio=Math.max(W/nw, H/nh);
+      baseW=nw*ratio; baseH=nh*ratio; scale=1;
+      tx=(W-baseW)/2; ty=(H-baseH)/2;
+      cropImg.src=img.src;
+      cropImg.style.width=baseW+'px';
+      cropImg.style.height=baseH+'px';
+      zoomSlider.value=1; applyCrop();
+    });
+  };
+  img.src = cropKind==='kid' ? kids[idx].photo : photos[idx].src;
+}
+function applyCrop(){ cropImg.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`; }
+zoomSlider.oninput=()=>{
+  const W=cropStage.clientWidth, H=cropStage.clientHeight;
+  const s1=+zoomSlider.value, s0=scale, cx=W/2, cy=H/2;
+  tx=cx-(cx-tx)*(s1/s0); ty=cy-(cy-ty)*(s1/s0); scale=s1; applyCrop();
+};
+let dragging=false,lastX=0,lastY=0;
+function dStart(x,y){dragging=true;lastX=x;lastY=y;cropStage.classList.add('dragging');}
+function dMove(x,y){ if(!dragging)return; tx+=x-lastX; ty+=y-lastY; lastX=x;lastY=y; applyCrop(); }
+function dEnd(){dragging=false;cropStage.classList.remove('dragging');}
+cropStage.addEventListener('mousedown',e=>dStart(e.clientX,e.clientY));
+window.addEventListener('mousemove',e=>dMove(e.clientX,e.clientY));
+window.addEventListener('mouseup',dEnd);
+cropStage.addEventListener('touchstart',e=>{const t=e.touches[0];dStart(t.clientX,t.clientY);},{passive:true});
+cropStage.addEventListener('touchmove',e=>{const t=e.touches[0];dMove(t.clientX,t.clientY);},{passive:true});
+cropStage.addEventListener('touchend',dEnd);
+document.getElementById('cropCancel').onclick=()=>cropModal.classList.remove('open');
+document.getElementById('cropSave').onclick=()=>{
+  const W=cropStage.clientWidth, H=cropStage.clientHeight, Q=2;
+  const canvas=document.createElement('canvas');
+  canvas.width=W*Q; canvas.height=H*Q;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#000'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  const img=new Image();
+  img.onload=()=>{
+    ctx.drawImage(img, tx*Q, ty*Q, baseW*scale*Q, baseH*scale*Q);
+    try {
+      const data=canvas.toDataURL('image/jpeg',0.9);
+      if(cropKind==='kid'){ kids[cropTargetIdx].photo=data; }
+      else { photos[cropTargetIdx].src=data; }
+    }
+    catch(err){ /* keep original if export blocked */ }
+    if(cropKind==='kid'){ renderKids(); } else { renderGrid(); }
+    startSlideshow(); cropModal.classList.remove('open');
+  };
+  img.src=cropImg.src;
+};
+
+initFromUrl();
+</script>
+</body>
+</html>
