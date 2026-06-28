@@ -367,6 +367,12 @@
 </style>
 </head>
 <body>
+<!-- Hidden static form so Netlify always detects and registers the waitlist form -->
+<form name="waitlist" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="waitlist">
+  <input type="email" name="email">
+  <input name="bot-field">
+</form>
 <div class="shell">
 
   <!-- NAV -->
